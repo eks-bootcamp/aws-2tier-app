@@ -1,0 +1,41 @@
+name: Terraform Dev Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+      - '.terraform.lock.hcl'
+      - '.github/workflows/terraform-dev.yml'
+
+permissions:
+  contents: read
+
+env:
+  TF_CLOUD_ORGANIZATION: eks-bootcamp-org
+  TF_WORKSPACE: lifecycle-devint-cli
+  TF_TOKEN_app_terraform_io: ${{ secrets.HCP_TERRAFORM_TOKEN }}
+
+jobs:
+  terraform-deploy:
+    name: Deploy Terraform to Dev
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
