@@ -22,7 +22,7 @@ env:
 defaults:
   run:
     working-directory: environments/devint  
-    
+
 jobs:
   terraform-deploy:
     name: Deploy Terraform to Dev
@@ -35,6 +35,8 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.4
 
       - name: Terraform Init
         run: terraform init
