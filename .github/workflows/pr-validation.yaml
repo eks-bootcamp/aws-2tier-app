@@ -4,11 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - '**.tf'
-      - '**.tfvars'
-      - '.terraform.lock.hcl'
-      - '.github/workflows/terraform-pr.yml'
 
 permissions:
   contents: read
@@ -18,6 +13,11 @@ env:
   TF_CLOUD_ORGANIZATION: eks-bootcamp-org
   TF_WORKSPACE: lifecycle-devint-cli
   TF_TOKEN_app_terraform_io: ${{ secrets.HCP_TERRAFORM_TOKEN }}
+
+defaults:
+  run:
+    working-directory: environments/devint  
+
 
 jobs:
   terraform-pr:
@@ -31,6 +31,8 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.4
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
